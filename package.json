@@ -4,12 +4,12 @@
     "mysql": "^2.18.1"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
-  "name": "Employee_System",
+  "name": "employee-system",
   "description": "",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smilleeymilleey/Employee_System.git"

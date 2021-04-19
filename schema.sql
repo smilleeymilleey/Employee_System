@@ -15,6 +15,17 @@ manager_id int (20),
 PRIMARY KEY (id)
 );
 
+UPDATE
+employee
+SET 
+first_name  = "ROB",
+last_name = "ROBERTON",
+
+WHERE 
+id = 2
+
+
+
 CREATE TABLE roles
 (
 id INT NOT NULL AUTO_INCREMENT,
