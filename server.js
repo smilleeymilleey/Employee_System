@@ -10,3 +10,10 @@ const connection = mysql.createConnection({
     password: '',
     database: 'employee',
 });
+
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.log(`connected!`);
+    
+  });
