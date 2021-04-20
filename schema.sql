@@ -15,6 +15,11 @@ manager_id int (20),
 PRIMARY KEY (id)
 );
 
+
+
+
+
+
 UPDATE
 employee
 SET 
