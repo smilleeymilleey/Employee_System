@@ -39,45 +39,15 @@ connection.connect((err) => {
 // get entire department table
 // SELECT * From employee_trackerdb.department
 
-// adding dummy data for the database 
-
-
 
 
 // inquirer prompts for command line questioning 
 
-function addEmployee(){
-    inquirer
-    .prompt([
-        /* Pass your questions in here */
-        {
-        type: "input",
-        name: "name",
-        message: "Enter First Name of Employee",  
-        }
-        
-    ])
-
-    .then(answer => {
-    // Use user feedback for... whatever!
-        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
-        {
-            first_name: answer.name
-        },
-        (err) => {
-            if (err) throw err;
-            console.table('New Employee was created successfully!');
-            prompt();     
-     }
-    )
-
-})
-
-}
+// adding department to inquirer 
 
 
-prompt();
-function prompt(){
+start();
+function start(){
 
     inquirer
     .prompt([
@@ -97,14 +67,16 @@ function prompt(){
 
         if (choices.name === "View All Employees") {
             connection.query('SELECT * From employee_trackerdb.employee', function (error, results, fields) {
-                console.log(results)
-                prompt();
+                console.table(results)
+                start();
             })
 
 
         } else if (choices.name === "Add Employee") {
             addEmployee();
 
+        } else if (choices.name === "View All Employees By Department"){
+            addDepartment()
         }
         
             
@@ -118,3 +90,83 @@ function prompt(){
     });
 
 }
+
+function addDepartment(){
+    inquirer
+    .prompt([
+        /* Pass your questions in here */
+        {
+        type: "input",
+        name: "name",
+        message: "What is the empployees first name? ",  
+        }, 
+        {
+        type: "input",
+        name: "name",
+        message: "What is the employees last name?",  
+        }, 
+        {
+        type: "list",
+        name: "name",
+        message: "What is the Employees Role?",  
+        choices: ["Sales Lead", "Sales Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
+        },    
+    ])
+
+    .then(answer => {
+    // Use user feedback for... whatever!
+        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
+        {
+            first_name: answer.name, 
+        },
+        (err) => {
+            if (err) throw err;
+            console.table('New Employee was created successfully!');
+            startt();     
+        });
+    });
+}
+
+
+
+// adding employee to inquirer 
+
+function addEmployee(){
+    inquirer
+    .prompt([
+        /* Pass your questions in here */
+        {
+        type: "input",
+        name: "firstname",
+        message: "What is the empployees first name? ",  
+        }, 
+        {
+        type: "input",
+        name: "lastname",
+        message: "What is the employees last name?",  
+        }, 
+        {
+        type: "list",
+        name: "department",
+        message: "What is the Employees Role?",  
+        choices: ["Sales Lead", "Sales Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
+        },    
+    ])
+
+    .then(answer => {
+    // Use user feedback for... whatever!
+        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
+        {
+            first_name: answer.firstname,
+            last_name: answer.lastname,
+        
+        },
+
+
+        (err) => {
+            if (err) throw err;
+            console.table('New Employee was created successfully!');
+            startt();     
+        });
+    });
+  }
