@@ -1,7 +1,5 @@
-
-// connection to mysql & inquirer & sequalize 
 const mysql = require('mysql');
-var inquirer = require('inquirer');
+const inquirer = require('inquirer');
 const util = require ('util');
 
 const connection = mysql.createConnection({
@@ -12,51 +10,39 @@ const connection = mysql.createConnection({
     database: 'employee_trackerdb',
 });
 
-
 connection.connect((err) => {
     if (err) throw err;
-    console.log(`connected!`);
-    
-  });
+    console.log(`connected!`);  
+});
 
 const query = util.promisify(connection.query).bind(connection)
 
 start();
+
 function start(){
-    inquirer
-    .prompt([
-        /* Pass your questions in here */
-    {
-        type: "list",
-        name: "name",
-        message: "What would you like to do?",
-        choices: ["View All Employees", "View All Departments", "View All Roles","Add Employee", "Add Role", "Add Department", "Update Employee Role", "Update Employee Manager"]
-    }
-       
-    ])
-    .then(choices => {
-        // Use user feedback for... whatever!!
-        console.log(choices)
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "name",
+            message: "What would you like to do?",
+            choices: ["View All Employees", "View All Departments", "View All Roles","Add Employee", "Add Role", "Add Department", "Update Employee Role"]
+        }
+    ]).then(choices => {
         if (choices.name === "View All Employees") {
             connection.query('SELECT * From employee_trackerdb.employee', function (error, results, fields) {
                 console.table(results)
                 start();
             })
-            
         } else if (choices.name === "Add Employee") {
-            addEmployee();
-            
-            
+            addEmployee();   
         } else if (choices.name === "View All Roles") {
             connection.query('SELECT * From employee_trackerdb.roles', function
             (error, results, fields) {
                 console.table(results)
                 start(); 
             })
-
         } else if (choices.name === "Add Role"){
-            addRole()
-            
+            addRole() 
         } else if (choices.name === "View All Departments") {
             connection.query('SELECT * From employee_trackerdb.department', function
             (error, results, fields) {
@@ -65,34 +51,56 @@ function start(){
             })
         } else if (choices.name === "Add Department"){
             addDepartment()
-        }       
-       
-    })
-    // console.table([connection.query])
-    
-    .catch(error => {
-        if(error.isTtyError) {
-            // Prompt couldn't be rendered in the current environment
-        } 
+        }        
+    }).catch(error => {
+        console.error(error);
     });
-
 }
 
 async function getRoles() {
     let roles = await query('SELECT * From employee_trackerdb.roles') 
     roles = roles.map(role => role.title)
+
     return roles; 
 }
-// adding employee to inquirer 
 
 async function addEmployee(){
-    
     let roles = await getRoles();
-    console.log(roles)
     
-    inquirer
-    .prompt([
-        /* Pass your questions in here */
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "firstname",
+            message: "What is the empployees first name? ",  
+        }, 
+        {
+            type: "input",
+            name: "lastname",
+            message: "What is the employees last name?",  
+        }, 
+        {
+            type: "list",
+            name: "department",
+            message: "What is the Employees Role?",  
+            choices: roles
+         }    
+    ]).then(answer => {
+        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?',
+        {
+            first_name: answer.firstname,
+            last_name: answer.lastname,  
+        },
+        (err) => {
+            if (err) throw err;
+            console.table('New Employee was created successfully!');
+            start();     
+        })
+    });
+}
+async function addEmployee(){
+    let roles = await getRoles();
+
+    inquirer.prompt([
         {
             type: "input",
             name: "firstname",
@@ -110,22 +118,18 @@ async function addEmployee(){
             choices: roles
          }    
     ])
-
-.then(answer => {
-    // Use user feedback for... whatever!
-    connection.query( 'INSERT INTO employee_trackerdb.employee SET ?',
-    {
-        first_name: answer.firstname,
-        last_name: answer.lastname,
-        
-    },
-    
-    (err) => {
-        if (err) throw err;
-        console.table('New Employee was created successfully!');
-        start();     
-    })
-});
+    .then(answer => {
+        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?',
+        {
+            first_name: answer.firstname,
+            last_name: answer.lastname,  
+        },
+        (err) => {
+            if (err) throw err;
+            console.table('New Employee was created successfully!');
+            start();     
+        })
+    });
 }
 
 
