@@ -2,6 +2,7 @@
 // connection to mysql & inquirer & sequalize 
 const mysql = require('mysql');
 var inquirer = require('inquirer');
+const util = require ('util');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -18,6 +19,7 @@ connection.connect((err) => {
     
   });
 
+const query = util.promisify(connection.query).bind(connection)
 
 start();
 function start(){
@@ -38,6 +40,7 @@ function start(){
         if (choices.name === "View All Employees") {
             connection.query('SELECT * From employee_trackerdb.employee', function (error, results, fields) {
                 console.table(results)
+                start();
             })
             
         } else if (choices.name === "Add Employee") {
@@ -48,7 +51,7 @@ function start(){
             connection.query('SELECT * From employee_trackerdb.roles', function
             (error, results, fields) {
                 console.table(results)
-                
+                start(); 
             })
 
         } else if (choices.name === "Add Role"){
@@ -58,12 +61,12 @@ function start(){
             connection.query('SELECT * From employee_trackerdb.department', function
             (error, results, fields) {
                 console.table(results)
-                
+                start();
             })
         } else if (choices.name === "Add Department"){
             addDepartment()
         }       
-        start();
+       
     })
     // console.table([connection.query])
     
@@ -75,10 +78,17 @@ function start(){
 
 }
 
-
+async function getRoles() {
+    let roles = await query('SELECT * From employee_trackerdb.roles') 
+    roles = roles.map(role => role.title)
+    return roles; 
+}
 // adding employee to inquirer 
 
-function addEmployee(){
+async function addEmployee(){
+    
+    let roles = await getRoles();
+    console.log(roles)
     
     inquirer
     .prompt([
@@ -97,7 +107,7 @@ function addEmployee(){
             type: "list",
             name: "department",
             message: "What is the Employees Role?",  
-            choices: ["Sales Lead", "Sales Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
+            choices: roles
          }    
     ])
 
