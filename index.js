@@ -28,7 +28,7 @@ function start(){
         type: "list",
         name: "name",
         message: "What would you like to do?",
-        choices: ["View All Employees", "View All Employees By Department", "View All Employees By Manager", "Add Employee", "Add Role", "Add Department", "Remove Employee", "Update Employee Role", "Update Employee Manager"]
+        choices: ["View All Employees", "View All Departments", "View All Roles","Add Employee", "Add Role", "Add Department", "Update Employee Role", "Update Employee Manager"]
     }
        
     ])
@@ -38,24 +38,38 @@ function start(){
         if (choices.name === "View All Employees") {
             connection.query('SELECT * From employee_trackerdb.employee', function (error, results, fields) {
                 console.table(results)
-                start();
             })
-
+            
         } else if (choices.name === "Add Employee") {
             addEmployee();
+            
+            
+        } else if (choices.name === "View All Roles") {
+            connection.query('SELECT * From employee_trackerdb.roles', function
+            (error, results, fields) {
+                console.table(results)
+                
+            })
 
         } else if (choices.name === "Add Role"){
             addRole()
-               
+            
+        } else if (choices.name === "View All Departments") {
+            connection.query('SELECT * From employee_trackerdb.department', function
+            (error, results, fields) {
+                console.table(results)
+                
+            })
         } else if (choices.name === "Add Department"){
             addDepartment()
         }       
+        start();
     })
-        // console.table([connection.query])
-
+    // console.table([connection.query])
+    
     .catch(error => {
         if(error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
+            // Prompt couldn't be rendered in the current environment
         } 
     });
 
