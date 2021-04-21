@@ -2,7 +2,7 @@ CREATE DATABASE Employee
 
 CREATE TABLE Persons
 (
-Id INT NOT NULL AUTO_INCREMENT,,
+Id INT NOT NULL AUTO_INCREMENT,
 LastName varchar(30),
 FirstName varchar(30),
 Role_Id int(10),

@@ -1,3 +1,4 @@
+
 // connection to mysql & inquirer & sequalize 
 const mysql = require('mysql');
 var inquirer = require('inquirer');
@@ -122,7 +123,7 @@ function addDepartment(){
         (err) => {
             if (err) throw err;
             console.table('New Employee was created successfully!');
-            startt();     
+            start();     
         });
     });
 }
@@ -166,7 +167,7 @@ function addEmployee(){
         (err) => {
             if (err) throw err;
             console.table('New Employee was created successfully!');
-            startt();     
+            start();     
         });
     });
   }
