@@ -7,7 +7,7 @@ USE employee_trackerdb;
 CREATE TABLE department
 (
 id INT NOT NULL AUTO_INCREMENT,
-name varchar(30),
+dept_name varchar(30),
 PRIMARY KEY(id)
 );
 
@@ -19,6 +19,7 @@ salary decimal(30),
 department_id int,
 PRIMARY KEY (id),
 FOREIGN KEY (department_id) REFERENCES department(id)
+
 );
 
 CREATE TABLE employee
