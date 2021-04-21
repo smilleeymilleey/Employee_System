@@ -52,6 +52,9 @@ function start(){
         } else if (choices.name === "Add Department"){
             addDepartment()
         }        
+         else if (choices.name === "Update Employee Role"){
+            updateRole();
+        }        
     }).catch(error => {
         console.error(error);
     });
@@ -62,6 +65,13 @@ async function getRoles() {
     roles = roles.map(role => role.title)
 
     return roles; 
+}
+
+async function getEmployees() {
+    let employees = await query('SELECT * From employee_trackerdb.employee') 
+    employees = employees.map(employee => employee.first_name || "")
+
+    return employees; 
 }
 
 async function addEmployee(){
@@ -97,25 +107,23 @@ async function addEmployee(){
         })
     });
 }
-async function addEmployee(){
+async function updateRole(){
     let roles = await getRoles();
+    let employees = await getEmployees();
 
     inquirer.prompt([
+       
         {
-            type: "input",
-            name: "firstname",
-            message: "What is the empployees first name? ",  
-        }, 
-        {
-            type: "input",
-            name: "lastname",
-            message: "What is the employees last name?",  
+            type: "list",
+            name: "employees",
+            message: "What is the employees name?", 
+            choices: employees 
         }, 
         {
             type: "list",
-            name: "department",
+            name: "role",
             message: "What is the Employees Role?",  
-            choices: roles
+            choices: roles,
          }    
     ])
     .then(answer => {
@@ -131,6 +139,25 @@ async function addEmployee(){
         })
     });
 }
+
+function addRoleToName(){
+    connection.query( 'SELECT role.id FROM roles INNER JOIN employee ON employee.role_id=roles.id',
+        {
+            first_name: answer.firstname,
+            last_name: answer.lastname,  
+        },
+        (err) => {
+            if (err) throw err;
+            console.table('New Employee was created successfully!');
+            start();     
+        })
+}
+
+
+
+
+
+
 
 
 
@@ -175,7 +202,6 @@ function addRole(){
         })
     });
     
-
 }
    
     function addDepartment(){
