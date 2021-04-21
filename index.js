@@ -77,6 +77,8 @@ function start(){
             addEmployee();
 
         } else if (choices.name === "View All Employees By Department"){
+
+
             addDepartment()
         }
         
@@ -98,41 +100,97 @@ function addDepartment(){
         /* Pass your questions in here */
         {
         type: "input",
-        name: "name",
+        name: "employeeFirstName",
         message: "What is the empployees first name? ",  
         }, 
         {
         type: "input",
-        name: "name",
+        name: "employeeLastName",
         message: "What is the employees last name?",  
         }, 
         {
         type: "list",
-        name: "name",
+        name: "role",
         message: "What is the Employees Role?",  
         choices: ["Sales Lead", "Sales Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
         },    
     ])
 
     .then(answer => {
-    // Use user feedback for... whatever!
-        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
-        {
-            first_name: answer.name, 
-        },
-        (err) => {
-            if (err) throw err;
-            console.table('New Employee was created successfully!');
-            start();     
-        });
+
+        switch (answer.role) {
+            case 'Sales Lead':
+                // addSalesLead();
+                break;
+            case 'Sales Person':
+                // addSales();
+                break;
+            case 'Lead Engineer':
+                // addILeadEngineer();
+                break;
+            case 'Software Engineer':
+                // addSoftwareEngineer();
+                break;
+            case 'Account Manager':
+                // addAccountManager();
+                break;
+            case 'Accountant':
+                // addAccountant();
+                break;
+            case 'Legal Team Lead':
+                // addLegal;
+                break;
+            case `I'm finished building my team`:
+                // finishedTeam(employees);
+                break;
+            default:
+                break;
+        }
+
+
     });
 }
+
+
+function addSalesLead() {
+    connection.query( 'INSERT INTO employee_trackerdb.employee SET ?',
+    {
+        first_name: answer.firstname,
+        last_name: answer.lastname,
+    
+    },
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Use user feedback for... whatever!
+    //     connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
+    //     {
+    //         first_name: answer.name, 
+    //     },
+    //     (err) => {
+    //         if (err) throw err;
+    //         console.table('New Employee was created successfully!');
+    //         start();     
+    //     });
+    // });
 
 
 
 // adding employee to inquirer 
 
 function addEmployee(){
+ 
     inquirer
     .prompt([
         /* Pass your questions in here */
@@ -151,23 +209,22 @@ function addEmployee(){
         name: "department",
         message: "What is the Employees Role?",  
         choices: ["Sales Lead", "Sales Person", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
-        },    
+        }    
     ])
 
     .then(answer => {
     // Use user feedback for... whatever!
-        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?', 
+        connection.query( 'INSERT INTO employee_trackerdb.employee SET ?',
         {
             first_name: answer.firstname,
             last_name: answer.lastname,
         
         },
-
-
+        
         (err) => {
             if (err) throw err;
             console.table('New Employee was created successfully!');
             start();     
-        });
+        })
     });
-  }
+}
